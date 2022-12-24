@@ -39,10 +39,18 @@
 #   Reporting a Vulnerability:
 #   Send e-mail to Emerson Rocha: rocha(at)ieee.org.
 ################################################################################
-echo "cat playbook.sh"
-echo "exiting..."
-exit 1
+# echo "cat playbook.sh"
+# echo "exiting..."
+# exit 1
+
+
+sudo hostnamectl set-hostname osmbra-bravo.etica.ai
 
 # - https://github.com/openfaas/faasd
 # - https://blog.alexellis.io/deploy-serverless-faasd-with-cloud-init/
 # - https://www.openfaas.com/blog/openfaas-functions-with-github-actions/
+
+##### cloud-config.txt _________________________________________________________
+# @see https://github.com/contabo/cntb
+
+# hosts/osmbra-bravo/cloud-config.txt
