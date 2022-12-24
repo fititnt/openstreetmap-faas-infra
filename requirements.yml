@@ -1,0 +1,9 @@
+---
+# FILE:            requirements.yml
+# LICENSE:         Public Domain
+
+# USAGE:           ansible-galaxy install -r requirements.yml
+
+# https://github.com/geerlingguy/ansible-role-swap
+- src: geerlingguy.swap
+  # Tested with: geerlingguy.swap (1.0.2)

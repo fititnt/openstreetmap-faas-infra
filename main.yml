@@ -1,0 +1,56 @@
+---
+# FILE:            main-personal-assistant.yml
+# LICENSE:         Public Domain
+# DESCRIPTION:     Principaal Ansible playbook de portogente-infra-playbooks.
+#                  Permite reconstruir toda infra-estrutura em servidores novos
+#                  e aplicar atualizações bem documentadas nos atuais.
+
+#### Running ___________________________________________________________________
+# Run all (with -diff to see changes)
+#     ansible-playbook -i inventories/osmbr main.yml
+#
+# Dry-run (simulate, but dont run)
+#     ansible-playbook -i inventories/osmbr main.yml --check
+#     ansible-playbook -i inventories/osmbr main.yml --diff
+#
+# just ping (uses individual playbook directly)
+#     ansible-playbook -i inventories/osmbr playbooks/ping-all.yml
+
+#### Only when restoring from scratch, START -----------------------------------
+# 1. all:
+#     ./non-automated/custom-ssh-port.sh
+#     ./non-automated/add-pubkekeys.sh
+#### Only when restoring from scratch, END -------------------------------------
+
+#### Default tasks (are indepontend, safe to run normaly), START ---------------
+
+- import_playbook: playbooks/ping-all.yml
+- import_playbook: playbooks/infra-swap.yml
+# - import_playbook: playbooks/infra-ufw.yml
+# - import_playbook: playbooks/infra-cockpit.yml
+# # - import_playbook: playbooks/infra-swap.yml
+# # - import_playbook: playbooks/infra-customtools.yml
+# - import_playbook: playbooks/infra-rpa-quick-n-dirty.yml
+# - import_playbook: playbooks/infra-nginx.yml
+# - import_playbook: playbooks/infra-docker-host.yml
+# - import_playbook: playbooks/infra-docker-portainer.yml
+# - import_playbook: playbooks/infra-docker-nextcloud.yml
+# - import_playbook: playbooks/infra-docker-bitwardenrs.yml
+# - import_playbook: playbooks/infra-docker-webdav.yml # Aguardar upgrade de anortosito
+
+# @TODO copy others from https://github.com/fititnt/setelagoas-infra-playbooks/tree/master/playbooks
+
+#### Default tasks (are indepontend, safe to run normaly), END -----------------
+
+#### Only when restoring from scratch, START -----------------------------------
+# (...)
+#### Only when restoring from scratch, END -------------------------------------
+
+#### Preparing to reconstruct a new node, START --------------------------------
+# (...)
+#### Preparing to reconstruct a new node, END -------------------------------------
+
+
+# Other
+# apt install htop
+# apt install apache2-utils

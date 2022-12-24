@@ -1,0 +1,12 @@
+---
+# FILE:            inventories/producao/group_vars/swap.yml
+# LICENSE:         Public Domain
+# SEE:             https://github.com/geerlingguy/ansible-role-swap
+
+swap_file_size_mb: '8192'
+
+# Default swapness is 10. For a database server should be 0 or 1
+swap_swappiness: '10'
+
+swap_file_path: /swapfile
+swap_file_state: present

@@ -1,0 +1,13 @@
+---
+# FILE:            infra-swap.yml
+# LICENSE:         Public Domain
+# SEE:             https://github.com/geerlingguy/ansible-role-swap
+
+# ansible-playbook -i inventory/bravo playbooks/infra-swap.yml
+
+- name: "infra-swap.yml"
+  hosts: swap
+  remote_user: root
+  debugger: on_failed
+  roles:
+    - role: geerlingguy.swap

@@ -7,9 +7,10 @@ ansible_host: osmbra-bravo.etica.ai
 node_ipv4: 167.86.127.220
 node_iata: MUC # Munich, Germany
 node_provider: Contabo
-node_base: "{{ playbook_dir }}/files/basalto"
-# node_port_ssh: 65432
+node_base: "{{ playbook_dir }}/files/osmbr_bravo"
+node_port_ssh: 65432
 
-ansible_user: ansible
-ansible_become: yes
-ansible_become_user: root
+ansible_user: root
+# ansible_user: ansible
+# ansible_become: yes
+# ansible_become_user: root

@@ -4,3 +4,9 @@
 
 [all_nodes]
 osmbr_bravo
+
+[ufw]
+osmbr_bravo
+
+[swap]
+osmbr_bravo
