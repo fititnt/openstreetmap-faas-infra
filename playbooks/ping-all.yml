@@ -1,0 +1,27 @@
+---
+# FILE:            ping-all.yml
+# LICENSE:         Public Domain
+
+# ansible-playbook -i inventories/rpa-prod playbooks/ping-all.yml
+# ansible-playbook -i inventories/osmbr playbooks/ping-all.yml
+
+- name: "test connection"
+  hosts: "{{ targets | default('all_nodes') }}"
+  # remote_user: root
+  # debugger: on_failed
+  gather_facts: false
+  # vars:
+
+  tasks:
+    - name: "ping all"
+      ping:
+        data: pong
+
+    # - name: "debug ansible"
+    #   debug:
+    #     msg:
+    #       group_names: "{{ group_names }}"
+    #       # inventory_file: "{{ inventory_file }}"
+    #       # hostvars: "{{ hostvars }}"
+    #       mariadb_superuser_rocha_bravo: "{{ mariadb_superuser_rocha_bravo }}"
+    #       mariadb_genericdbuser_rocha_bravo: "{{ mariadb_genericdbuser_rocha_bravo }}"

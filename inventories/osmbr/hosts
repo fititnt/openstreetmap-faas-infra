@@ -1,0 +1,6 @@
+# FILE:            inventories/osmbr/hosts
+# LICENSE:         Public Domain
+#
+
+[all_nodes]
+osmbr_bravo

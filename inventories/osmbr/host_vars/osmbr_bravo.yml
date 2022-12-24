@@ -1,0 +1,15 @@
+---
+# FILE:            inventories/osmbr/host_vars/osmbr_bravo.yml
+# LICENSE:         Public Domain
+
+ansible_host: osmbra-bravo.etica.ai
+# ansible_python_interpreter: "/usr/bin/python3"
+node_ipv4: 167.86.127.220
+node_iata: MUC # Munich, Germany
+node_provider: Contabo
+node_base: "{{ playbook_dir }}/files/basalto"
+# node_port_ssh: 65432
+
+ansible_user: ansible
+ansible_become: yes
+ansible_become_user: root

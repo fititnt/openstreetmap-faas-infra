@@ -1,2 +1,66 @@
-# osmbra-faas-infra
+# osm-faas-infra
 [draft]
+
+## Options
+
+```bash
+faas-cli template store list
+
+NAME                     SOURCE             DESCRIPTION
+csharp                   openfaas           Classic C# template
+dockerfile               openfaas           Classic Dockerfile template
+go                       openfaas           Classic Golang template
+java11                   openfaas           Java 11 template
+java11-vert-x            openfaas           Java 11 Vert.x template
+node17                   openfaas           HTTP-based Node 17 template
+node16                   openfaas           HTTP-based Node 16 template
+node14                   openfaas           HTTP-based Node 14 template
+node12                   openfaas           HTTP-based Node 12 template
+node                     openfaas           Classic NodeJS 8 template
+puppeteer-nodelts        alexellis          A puppeteer template for headless Chrome
+php7                     openfaas           Classic PHP 7 template
+php8                     openfaas           Classic PHP 8 template
+python                   openfaas           Classic Python 2.7 template
+python3                  openfaas           Classic Python 3.6 template
+python3-dlrs             intel              Deep Learning Reference Stack v0.4 for ML workloads
+ruby                     openfaas           Classic Ruby 2.5 template
+ruby-http                openfaas           Ruby 2.4 HTTP template
+python27-flask           openfaas           Python 2.7 Flask template
+python3-flask            openfaas           Python 3.7 Flask template
+python3-flask-debian     openfaas           Python 3.7 Flask template based on Debian
+python3-http             openfaas           Python 3.7 with Flask and HTTP
+python3-http-debian      openfaas           Python 3.7 with Flask and HTTP based on Debian
+golang-http              openfaas           Golang HTTP template
+golang-middleware        openfaas           Golang Middleware template
+python3-debian           openfaas           Python 3 Debian template
+powershell-template      openfaas-incubator Powershell Core Ubuntu:16.04 template
+powershell-http-template openfaas-incubator Powershell Core HTTP Ubuntu:16.04 template
+rust                     booyaa             Rust template
+crystal                  tpei               Crystal template
+csharp-httprequest       distantcam         C# HTTP template
+csharp-kestrel           burtonr            C# Kestrel HTTP template
+vertx-native             pmlopes            Eclipse Vert.x native image template
+swift                    affix              Swift 4.2 Template
+lua53                    affix              Lua 5.3 Template
+vala                     affix              Vala Template
+vala-http                affix              Non-Forking Vala Template
+quarkus-native           pmlopes            Quarkus.io native image template
+perl-alpine              tmiklas            Perl language template based on Alpine image
+crystal-http             koffeinfrei        Crystal HTTP template
+rust-http                openfaas-incubator Rust HTTP template
+bash-streaming           openfaas-incubator Bash Streaming template
+cobol                    devries            COBOL Template
+
+```
+
+## Disclaimers
+<!--
+TODO see https://wiki.osmfoundation.org/wiki/Trademark_Policy
+-->
+
+OpenStreetMap™ is a trademark of the OpenStreetMap Foundation, and is used with their permission.
+This project is not endorsed by or affiliated with the OpenStreetMap Foundation.
+
+## License
+
+Public domain
