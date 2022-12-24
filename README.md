@@ -1,2 +1,2 @@
-# osmbra-infra
+# osmbra-faas-infra
 [draft]
