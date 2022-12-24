@@ -1,6 +1,47 @@
 # osm-faas-infra
 [draft]
 
+## Test URLs
+- curl https://osm-faas.etica.ai/function/nodeinfo
+- curl https://osm-faas.etica.ai/function/env
+- curl https://osm-faas.etica.ai/function/identicon
+- curl -X POST -d 'perfect test!' https://osm-faas.etica.ai/function/sentimentanalysis
+
+
+## Login
+
+```bash
+# Install the faas-cli on your machine
+curl -sSL https://cli.openfaas.com | sudo sh
+
+# Then setup the variables. Contact operator for what "<passwordhere>" is
+export OPENFAAS_URL=https://osm-faas.etica.ai/
+export OPENFAAS_USER=admin
+
+## Alternative 1
+ echo "<passwordhere>" > ~/faas_pass.txt
+cat ~/faas_pass.txt | faas-cli login -u "$OPENFAAS_USER" --password-stdin
+
+## Alternative 1
+ export OPENFAAS_PASS="<passwordhere>"
+echo "$OPENFAAS_PASS" | faas-cli login -u "$OPENFAAS_USER" --password-stdin
+
+## all options
+faas-cli help
+
+## Then you can access all the information also via command line
+faas-cli list
+#    Function                      	Invocations    	Replicas
+#    business-strategy-generator   	13119          	1    
+#    env                           	7              	1    
+#    identicon                     	3              	1    
+#    nodeinfo                      	2281           	1    
+#    ocr                           	2              	1    
+#    sentimentanalysis             	9              	1 
+#    (...)
+
+```
+
 ## Options
 
 ```bash

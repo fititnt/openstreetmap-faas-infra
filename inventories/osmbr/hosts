@@ -2,6 +2,8 @@
 # LICENSE:         Public Domain
 #
 
+# osm-faas.etica.ai CNAME osmbra-bravo.etica.ai (cloudflare auto HTTPS)
+
 [all_nodes]
 osmbr_bravo
 
@@ -9,4 +11,10 @@ osmbr_bravo
 osmbr_bravo
 
 [swap]
+osmbr_bravo
+
+[certbot]
+osmbr_bravo
+
+[nginx]
 osmbr_bravo

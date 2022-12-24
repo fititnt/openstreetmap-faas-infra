@@ -2,6 +2,9 @@
 # FILE:            inventories/osmbr/host_vars/osmbr_bravo.yml
 # LICENSE:         Public Domain
 
+# osm-faas.etica.ai CNAME osmbra-bravo.etica.ai (cloudflare auto HTTPS)
+
+
 ansible_host: osmbra-bravo.etica.ai
 # ansible_python_interpreter: "/usr/bin/python3"
 node_ipv4: 167.86.127.220

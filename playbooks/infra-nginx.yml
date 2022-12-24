@@ -1,0 +1,132 @@
+---
+# FILE:            playbooks/infra-nginx.yml
+# LICENSE:         Public Domain
+# DESCRIPTION:
+#
+# USAGE:
+# To run this playbook alone, use:
+#     ansible-playbook -i inventories/producao playbooks/infra-nginx.yml --diff
+#     ansible-playbook -i inventories/producao playbooks/infra-nginx.yml --diff --limit="urano_setelagoas"
+#     ansible-playbook -i inventories/producao playbooks/infra-nginx.yml --diff --limit="urano_setelagoas" --tags=nginx-vhosts-update
+#     ansible-playbook -i inventories/cdn playbooks/infra-nginx.yml --diff
+#
+# NOTE ON SELinux (read this if fail after first installation)
+# You can allow nginx proxy to http://localhost:8000 with this:
+#     sudo setsebool -P httpd_can_network_connect 1
+#
+# TODO: considerar criar a propria entidade certificadora
+#       see https://deliciousbrains.com/ssl-certificate-authority-for-local-https-development/
+#       (fititnt, 2020-08-15 15:47)
+
+# TODO: considerar implementar 2FA com NGinx, vide https://github.com/vouch/vouch-proxy
+#       (fititnt, 2020-08-15 15:48 BRT)
+
+- name: "infra-nginx.yml"
+  hosts: "nginx"
+  become: true
+  become_user: root
+  debugger: on_failed
+  gather_facts: false
+  # vars:
+
+  handlers:
+    - name: restart nginx
+      service:
+        name: nginx
+        state: restarted
+
+    # - name: validate nginx configuration
+    #   command: nginx -t -c /etc/nginx/nginx.conf
+    #   changed_when: false
+
+    - name: reload nginx
+      service:
+        name: nginx
+        state: reloaded
+
+  tasks:
+    # - name: "infra-nginx.yml | ping all"
+    #   ping:
+    #     data: pong
+
+    - name: "infra-nginx.yml | Install nginx"
+      package:
+        name: "{{ item.name | default(item) }}"
+        state: "{{ item.state | default('present') }}"
+      with_items: "{{ nginx_packages }}"
+
+    - name: "infra-nginx.yml | /etc/nginx/sites-enabled/ should exist"
+      file:
+        path: "/etc/nginx/sites-enabled/"
+        state: directory
+      notify: reload nginx
+
+    - name: "infra-nginx.yml | /var/cache/nginx/ should exist"
+      file:
+        path: "/var/cache/nginx/"
+        state: directory
+
+    - name: "infra-nginx.yml | /var/cache/nginx/proxy/ should exist"
+      file:
+        path: "/var/cache/nginx/proxy/"
+        state: directory
+
+    # - name: "infra-nginx.yml | /var/cache/nginx/fastcgi/ should exist"
+    #   file:
+    #     path: "/var/cache/nginx/fastcgi/"
+    #     state: directory
+
+    - name: "infra-nginx.yml | nginx.conf"
+      template:
+        src: "{{ nginx_conf_main }}"
+        dest: "/etc/nginx/nginx.conf"
+        owner: root
+        group: root
+        mode: 0644
+        backup: yes
+      when:
+        - "(nginx_conf_main is defined) and (nginx_conf_main|length)"
+      notify: reload nginx
+      tags:
+        - nginx-vhosts-update
+
+    - name: "infra-nginx.yml | Add VHosts"
+      template:
+        src: "{{ item.src }}"
+        dest: "/etc/nginx/sites-enabled/{{ item.name }}.conf"
+        owner: root
+        group: "{{ item.group | default('root') }}"
+        mode: "{{ item.mode | default('0644') }}"
+        backup: "{{ item.backup | default(true) }}"
+      when:
+        - "(nginx_vhosts is defined) and (nginx_vhosts|length)"
+        - "(item.ignore_item is not defined) or (not item.ignore_item)"
+        - "item.state|default('present') != 'absent'"
+      with_items: "{{ nginx_vhosts }}"
+      notify: reload nginx
+      tags:
+        - nginx-vhosts-update
+
+    - name: "infra-nginx.yml | Remove default Vhost"
+      file:
+        path: "/etc/nginx/sites-enabled/default"
+        state: absent
+      when:
+        - "nginx_vhost_default_remove|default(false) == true"
+      notify: reload nginx
+
+    - name: "infra-nginx.yml | Remove VHosts"
+      file:
+        path: "/etc/nginx/sites-enabled/{{ item.name }}.conf"
+        state: absent
+      when:
+        - "(item.ignore_item is not defined) or (not item.ignore_item)"
+        - "item.state|default('present') == 'absent'"
+      with_items: "{{ nginx_vhosts }}"
+      notify: reload nginx
+
+    - name: "infra-nginx.yml | nginx enabled on boot"
+      service:
+        name: nginx
+        state: started
+        enabled: true

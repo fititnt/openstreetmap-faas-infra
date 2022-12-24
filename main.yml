@@ -24,14 +24,14 @@
 
 #### Default tasks (are indepontend, safe to run normaly), START ---------------
 
-- import_playbook: playbooks/ping-all.yml
-- import_playbook: playbooks/infra-swap.yml
+# - import_playbook: playbooks/ping-all.yml
+# - import_playbook: playbooks/infra-swap.yml
 # - import_playbook: playbooks/infra-ufw.yml
 # - import_playbook: playbooks/infra-cockpit.yml
 # # - import_playbook: playbooks/infra-swap.yml
 # # - import_playbook: playbooks/infra-customtools.yml
 # - import_playbook: playbooks/infra-rpa-quick-n-dirty.yml
-# - import_playbook: playbooks/infra-nginx.yml
+- import_playbook: playbooks/infra-nginx.yml
 # - import_playbook: playbooks/infra-docker-host.yml
 # - import_playbook: playbooks/infra-docker-portainer.yml
 # - import_playbook: playbooks/infra-docker-nextcloud.yml

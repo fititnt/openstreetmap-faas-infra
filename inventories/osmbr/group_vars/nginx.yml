@@ -1,0 +1,27 @@
+---
+# FILE:            group_vars/nginx.yml
+# LICENSE:         Public Domain
+# SEE:             https://github.com/geerlingguy/ansible-role-varnish
+#                  Tested on 2020-08-01 with: geerlingguy.varnish (3.3.0)
+
+nginx_packages:
+  - name: nginx
+    state: present
+  # ssl-cert, when installed, will create
+  #    /etc/ssl/certs/ssl-cert-snakeoil.pem
+  #    /etc/ssl/private/ssl-cert-snakeoil.key
+  - name: ssl-cert
+    state: present
+
+nginx_conf_main: "{{ node_base }}/etc/nginx/nginx.conf"
+nginx_vhost_default_remove: true
+nginx_vhosts:
+  - name: "default"
+    src: "{{ node_base }}/etc/nginx/sites-enabled/_default.conf"
+    state: present
+    backup: false
+
+  - name: "osm-faas"
+    src: "{{ node_base }}/etc/nginx/sites-enabled/osm-faas.conf"
+    state: present
+    backup: false
