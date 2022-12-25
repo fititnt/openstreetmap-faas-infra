@@ -42,6 +42,10 @@ sudo journalctl -f
 #### Open Ports and firewall
 sudo netstat -ntulp && sudo ufw status numbered
 
+#### Openfaas
+sudo journalctl -u faasd -f
+sudo journalctl -f
+
 ```
 
 ## Global overview

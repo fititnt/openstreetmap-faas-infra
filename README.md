@@ -1,4 +1,4 @@
-# osm-faas-infra
+# openstreetmap-faas-infra
 [draft]
 
 ## Test URLs

@@ -47,12 +47,12 @@ cat /var/lib/faasd/secrets/basic-auth-password | /usr/local/bin/faas-cli login -
 #  - runc
 #  - git
 
-runcmd:
-- curl -sfL https://raw.githubusercontent.com/openfaas/faasd/master/hack/install.sh | bash -s -
-- systemctl status -l containerd --no-pager
-- journalctl -u faasd-provider --no-pager
-- systemctl status -l faasd-provider --no-pager
-- systemctl status -l faasd --no-pager
-- curl -sSLf https://cli.openfaas.com | sh
-- sleep 60 && journalctl -u faasd --no-pager
-- cat /var/lib/faasd/secrets/basic-auth-password | /usr/local/bin/faas-cli login --password-stdin
+# runcmd:
+# - curl -sfL https://raw.githubusercontent.com/openfaas/faasd/master/hack/install.sh | bash -s -
+# - systemctl status -l containerd --no-pager
+# - journalctl -u faasd-provider --no-pager
+# - systemctl status -l faasd-provider --no-pager
+# - systemctl status -l faasd --no-pager
+# - curl -sSLf https://cli.openfaas.com | sh
+# - sleep 60 && journalctl -u faasd --no-pager
+# - cat /var/lib/faasd/secrets/basic-auth-password | /usr/local/bin/faas-cli login --password-stdin

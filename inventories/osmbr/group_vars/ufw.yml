@@ -1,0 +1,101 @@
+---
+# FILE:            group_vars/ufw.yml
+# LICENSE:         Public Domain
+# SEE:             https://docs.ansible.com/ansible/latest/modules/ufw_module.html
+#
+# DEBUG:
+#    sudo ufw status numbered
+#
+# NOTES/BUGS:
+#    1. Avoid ' & " inside rules comments
+
+# TODO: fix issue with UFW+Containerd
+#       See https://github.com/chaifeng/ufw-docker
+#       ufw status numbered
+#       ufw status numbered
+#       ufw disable
+
+# @see https://www.ubuntu18.com/ubuntu-change-ssh-port/
+ufw_port_ssh: "{{ ssh_port | default(22) }}"
+
+ufw_state: enabled
+ufw_enforcereset: true # Enforce reset before apply new rules (remove any customization)
+ufw_defaultfile: "{{ playbook_dir }}/templates/ufw/etc-ufw-default-ufw.j2"
+ufw_beforerulesfile: "{{ playbook_dir }}/templates/ufw/etc-ufw-before.rules.j2"
+ufw_ping_drop: false
+
+# Se o NMap descobrir que alguma porta esta aberta (ou se ele conseguiu dar ping)
+# e outras não, ele ira assumir que um DENY signfica algo ligado e com firewall
+# ja um REJECT explicito é uma forma de deixar claro que tem firewall e nem
+# adianta tentar (porem pode justamente ter mais acessos)
+#   @see https://www.digitalocean.com/community/tutorials/how-to-choose-an-effective-firewall-policy-to-secure-your-servers
+#   @see http://www.ouah.org/reject_or_deny.html
+ufw_default_policies:
+  - direction: incoming
+    policy: deny
+    # policy: reject
+  - direction: outgoing
+    policy: allow
+
+# These bastions plus local OS user "alligoagent" can be removed.
+ufw_bastions:
+  - ip: 167.86.127.225
+    name: "basalto-rocha"
+    ignore_item: "{{ (node_ipv4 | ipaddr) == ('167.86.127.225' | ipaddr) }}"
+  - ip: 191.252.103.250
+    name: "anortosito-rocha"
+    ignore_item: "{{ (node_ipv4 | ipaddr) == ('191.252.103.250' | ipaddr) }}"
+
+# # DMZ example
+# ufw_dmz:
+#   - ip: 191.123.123.123
+#     name: "netuno-setelagoas"
+#     ignore_item: "{{ (node_ipv4 | ipaddr) == ('191.123.123.123' | ipaddr) }}"
+#   - ip: 191.123.123.124
+#     name: "urano-setelagoas"
+#     ignore_item: "{{ (node_ipv4 | ipaddr) == ('191.123.123.124' | ipaddr) }}"
+
+ufw_rules:
+  # SSH port -------------------------------------------------------------------
+  - rule: limit
+    port: 22
+    proto: tcp
+    comment: "SSH port: limit (but dont block)"
+
+  - rule: limit
+    port: "{{ ufw_port_ssh }}"
+    proto: tcp
+    comment: "SSH custom port: limit (but dont block)"
+    ignore_item: "{{ (ufw_port_ssh | int) == ('22' | int) }}"
+
+  # Sysadmin Tools -------------------------------------------------------------
+  # - rule: allow
+  #   port: 19090
+  #   proto: tcp
+  #   comment: "Cockpit custom port: allow for all IPs"
+  # Web access -----------------------------------------------------------------
+  - rule: allow
+    port: 80
+    proto: tcp
+    comment: "HTTP port: allow for all IPs"
+  - rule: allow
+    port: 443
+    proto: tcp
+    comment: "HTTPS port: allow for all IPs"
+
+  # TODO: comment this 8080 rule
+  - rule: allow
+    port: 8080
+    proto: tcp
+    comment: "HTTP port: internal OpenFaas port (only for short time enable)"
+  # # TODO: comment this 8000 rule
+  # - rule: allow
+  #   port: 8000
+  #   proto: tcp
+  #   comment: "HTTP port: debug Varnish (only for short time enable)"
+  # # TODO: restrict port 5800 only for CDNs
+  # - rule: allow
+  #   port: 58000
+  #   proto: tcp
+  #   comment: "HTTP port exclusive for use of CDNs: allow for all IPs (must be closed later)"
+

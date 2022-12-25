@@ -1,6 +1,7 @@
 ---
 # FILE:            requirements.yml
 # LICENSE:         Public Domain
+# DESCRIPTION:     Ansible requeriments for external Roles
 
 # USAGE:           ansible-galaxy install -r requirements.yml
 

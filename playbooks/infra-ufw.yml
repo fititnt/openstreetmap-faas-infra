@@ -1,0 +1,291 @@
+---
+# FILE:            playbooks/infra-ufw.yml
+# LICENSE:         Public Domain
+#
+# USAGE:
+# To check changes without apply:
+#     ansible-playbook -i inventories/osmbr playbooks/infra-ufw.yml --check --diff
+#
+# To run this playbook alone, use:
+#     ansible-playbook -i inventories/osmbr playbooks/infra-ufw.yml --diff
+#     ansible-playbook -i inventories/osmbr playbooks/infra-ufw.yml --diff --limit=osmbr_bravo
+#
+# DEBUG:
+#    sudo ufw status numbered
+#
+# NOTES/BUGS:
+#    1. Avoid ' & " inside rules comments
+
+- name: "infra-ufw.yml"
+  hosts: "ufw"
+  become: true
+  become_user: root
+  debugger: on_failed
+  gather_facts: true
+  # vars:
+
+  handlers:
+    # - name: reload ufw
+    #   #service: name=ufw state=reloaded
+    #   service:
+    #     name: ufw
+    #     state: restarted
+
+    - name: restart ufw
+      service:
+        name: ufw
+        state: restarted
+
+  tasks:
+    # - name: "infra-ufw.yml | ping all"
+    #   ping:
+    #     data: pong
+
+    #### Fix dropped SSH session, START ________________________________________
+    # @see https://github.com/Oefenweb/ansible-ufw/blob/master/tasks/fix-dropped-ssh-sessions.yml
+    # @see https://askubuntu.com/a/1064533/261010
+    # @see https://www.spinics.net/lists/netfilter-devel/msg55682.html
+
+    - name: "infra-ufw.yml | fix dropped ssh sessions | check kernel_version"
+      set_fact:
+         kernel_version: "{{ ansible_kernel | regex_search('^([0-9]+\\.[0-9]+\\.[0-9]+)') }}"
+
+    - name: "infra-ufw.yml | fix dropped ssh sessions | check if conntrack exists"
+      stat:
+        path: /proc/sys/net/netfilter/nf_conntrack_tcp_be_liberal
+      register: _nf_conntrack_tcp_be_liberal
+      when:
+        - kernel_version is version('4.14', '>=')
+        - kernel_version is version('5', '<')
+
+    - name: "infra-ufw.yml | fix dropped ssh sessions | configure kernel"
+      sysctl:
+        name: net.netfilter.nf_conntrack_tcp_be_liberal
+        value: '1'
+        state: present
+        sysctl_set: true
+        reload: true
+      when:
+        - kernel_version is version('4.14', '>=')
+        - kernel_version is version('5', '<')
+        - _nf_conntrack_tcp_be_liberal.stat.exists
+
+    #### Fix dropped SSH session, END __________________________________________
+
+    #### Install _______________________________________________________________
+
+    - name: "infra-ufw.yml | package: ufw state: present"
+      package:
+        name: ufw
+        state: present
+
+    #### Apply rules ___________________________________________________________
+    - name: "infra-ufw.yml | /etc/default/ufw"
+      template:
+        src: "{{ ufw_defaultfile }}"
+        dest: "/etc/default/ufw"
+        owner: root
+        group: root
+        mode: 0640
+        backup: yes
+      register: result_ufw_defaultfile
+      when:
+        - "(ufw_defaultfile is defined) and (ufw_defaultfile|length > 0 )"
+
+    # TODO: debugar melhor o /etc/ufw/before.rules; editando manualmente no
+    #       servidor funciona, porem talvez o Ansible não está salvando direito.
+    #       (fititnt, 2020-08-17 03:09 BRT)
+    - name: "infra-ufw.yml | /etc/ufw/before.rules"
+      template:
+        src: "{{ ufw_beforerulesfile }}"
+        dest: "/etc/ufw/before.rules"
+        owner: root
+        group: root
+        mode: 0640
+        backup: yes
+      register: result_ufw_beforerulesfile
+      when:
+        - "(ufw_beforerulesfile is defined) and (ufw_beforerulesfile|length > 0 )"
+
+    # TODO: considerar implementar ansible facts para evitar mudar toda vez que é executado (fititnt, 2020-08-16 20:17 BRT)
+    - name: "infra-ufw.yml | ufw_enforcereset : Enforce reset before apply new rules (remove any customization)"
+      ufw:
+        state: reset
+      when:
+        - (("ufw_enforcereset is defined") and ("ufw_enforcereset|bool"))
+          or
+          (("result_ufw_defaultfile is defined") and (result_ufw_defaultfile is changed))
+          or
+          (("result_ufw_beforerulesfile is defined") and (result_ufw_beforerulesfile is changed))
+
+    - name: "infra-ufw.yml | ufw_default_policies"
+      ufw:
+        direction: "{{ item.direction }}"
+        policy: "{{ item.policy }}"
+      with_items: "{{ ufw_default_policies }}"
+      when:
+        - "ufw_default_policies is defined"
+      notify:
+        - restart ufw
+
+    - name: "infra-ufw.yml | ufw_bastions | FROM bastion"
+      ufw:
+        rule: allow
+        from_ip: "{{ item.ip }}"
+        comment: "Allow all from bastion {{ item.name }}"
+      with_items: "{{ ufw_bastions }}"
+      when:
+        - "ufw_bastions is defined"
+        - "(item.ignore_item is not defined) or (not item.ignore_item)"
+      notify:
+        - restart ufw
+
+    - name: "infra-ufw.yml | ufw_bastions | TO bastion"
+      ufw:
+        rule: allow
+        to_ip: "{{ item.ip }}"
+        comment: "Allow all to bastion {{ item.name }}"
+      with_items: "{{ ufw_bastions }}"
+      when:
+        - "ufw_bastions is defined"
+        - "(item.ignore_item is not defined) or (not item.ignore_item)"
+      notify:
+        - restart ufw
+
+    - name: "infra-ufw.yml | ufw_dmz | FROM DMZ hosts"
+      ufw:
+        rule: allow
+        from_ip: "{{ item.ip }}"
+        comment: "Allow all from bastion {{ item.name }}"
+      with_items: "{{ ufw_dmz }}"
+      when:
+        - "ufw_dmz is defined"
+        - "(item.ignore_item is not defined) or (not item.ignore_item)"
+      notify:
+        - restart ufw
+
+    - name: "infra-ufw.yml | ufw_dmz | TO DMZ hosts"
+      ufw:
+        rule: allow
+        to_ip: "{{ item.ip }}"
+        comment: "Allow all to bastion {{ item.name }}"
+      with_items: "{{ ufw_dmz }}"
+      when:
+        - "ufw_dmz is defined"
+        - "(item.ignore_item is not defined) or (not item.ignore_item)"
+      notify:
+        - restart ufw
+
+    - name: "infra-ufw.yml | rules"
+      ufw:
+        ### rule
+        ## Add firewall rule
+        # Choises:
+        #   - allow
+        #   - deny
+        #   - limit
+        #   - reject
+        rule: "{{ item.rule | default(omit) }}"
+
+        ## interface, if
+        # Specify interface for rule.
+        interface: "{{ item.interface | default(omit) }}"
+        if: "{{ item.if | default(omit) }}"
+
+        ### direction
+        ## Select direction for a rule or default policy command.
+        # Choises:
+        #   - in
+        #   - incoming
+        #   - out
+        #   - outgoing
+        #   - routed
+        direction: "{{ item.direction | default(omit) }}"
+
+        ### protocol, proto
+        ## TCP/IP protocol.
+        # Choises:
+        #   - any
+        #   - tcp
+        #   - udp
+        #   - ipv6
+        #   - esp
+        #   - ah
+        #   - gre
+        #   - igmp
+        protocol: "{{ item.protocol | default(omit) }}"
+        proto: "{{ item.proto | default(omit) }}"
+
+        ## route
+        # Apply the rule to routed/forwarded packets.
+        # Choises:
+        #   - no
+        #   - yes
+        route: "{{ item.route | default(omit) }}"
+
+        ## log
+        # Log new connections matched to this rule
+        # Choises:
+        #   - no
+        #   - yes
+        log: "{{ item.log | default(omit) }}"
+
+        ## logging
+        # Toggles logging. Logged packets use the LOG_KERN syslog facility.
+        # Choises:
+        #   - on
+        #   - off
+        #   - low
+        #   - medium
+        #   - high
+        #   - full
+        logging: "{{ item.logging | default(omit) }}"
+
+        ## from_ip, from, to
+        # Source IP address.
+        # Default: "any"
+        from_ip: "{{ item.from_ip | default(omit) }}"
+        from: "{{ item.from | default(omit) }}"
+        src: "{{ item.src | default(omit) }}"
+
+        ## from_port
+        # Destination port.
+        from_port: "{{ item.from_port | default(omit) }}"
+
+        ## to_ip, dest, to
+        # Destination IP address.
+        # Default: "any"
+        to_ip: "{{ item.to_ip | default(omit) }}"
+        dest: "{{ item.dest | default(omit) }}"
+        to: "{{ item.to | default(omit) }}"
+
+        ## to_port, port
+        # Destination port.
+        to_port: "{{ item.to_port | default(omit) }}"
+        port: "{{ item.port | default(omit) }}"
+
+        comment: "{{ item.comment | default(omit) }}"
+
+        ## delete
+        # Delete rule.
+        # Choises:
+        #   - no
+        #   - yes
+        delete: "{{ item.delete | default(omit) }}"
+
+      loop: "{{ ufw_rules }}"
+      loop_control:
+        extended: yes
+      notify:
+        - "restart ufw"
+      when:
+        - "ufw_rules is defined"
+        - "(item.ignore_item is not defined) or (not item.ignore_item)"
+
+    - name: "infra-ufw.yml | ufw_state enabled/disabled"
+      ufw:
+        state: "{{ ufw_state | default('enabled') }}"
+        # enabled reloads firewall and enables firewall on boot.
+        # disabled unloads firewall and disables firewall on boot.
+        # reloaded reloads firewall.
+        # reset disables and resets firewall to installation defaults.

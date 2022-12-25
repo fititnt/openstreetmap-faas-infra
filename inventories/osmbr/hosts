@@ -18,3 +18,6 @@ osmbr_bravo
 
 [nginx]
 osmbr_bravo
+
+[openfaasd]
+osmbr_bravo

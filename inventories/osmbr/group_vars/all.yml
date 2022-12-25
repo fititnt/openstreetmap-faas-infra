@@ -1,0 +1,5 @@
+---
+# FILE:            inventories/cdn/group_vars/all.yml
+# LICENSE:         Public Domain
+
+ssh_port: 65432
