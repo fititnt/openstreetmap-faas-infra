@@ -3,6 +3,8 @@
 #
 #          FILE:  custom-ssh-port.sh
 #
+#         USAGE:  ./deploy-functions.sh
+#
 #   DESCRIPTION:
 #
 #       OPTIONS:  ---

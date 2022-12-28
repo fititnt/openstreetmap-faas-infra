@@ -5,10 +5,7 @@
 #
 # USAGE:
 # To run this playbook alone, use:
-#     ansible-playbook -i inventories/producao playbooks/infra-nginx.yml --diff
-#     ansible-playbook -i inventories/producao playbooks/infra-nginx.yml --diff --limit="urano_setelagoas"
-#     ansible-playbook -i inventories/producao playbooks/infra-nginx.yml --diff --limit="urano_setelagoas" --tags=nginx-vhosts-update
-#     ansible-playbook -i inventories/cdn playbooks/infra-nginx.yml --diff
+#     ansible-playbook -i inventories/osmbr playbooks/infra-nginx.yml --diff
 #
 # NOTE ON SELinux (read this if fail after first installation)
 # You can allow nginx proxy to http://localhost:8000 with this:
