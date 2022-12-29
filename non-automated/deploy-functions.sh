@@ -28,4 +28,16 @@ OWNER="${OWNER:-fititnt}"
 OPENFAAS_URL="${OPENFAAS_URL:-'https://osm-faas.etica.ai/'}"
 OPENFAAS_USER="${OPENFAAS_USER:-'admin'}"
 
-echo "TODO"
+# echo "TODO"
+
+# # faas-cli template store list
+
+# faas-cli secret --help
+# # See https://docs.openfaas.com/cli/secrets/
+
+# For all options on how to deploy
+faas-cli deploy --help
+
+faas-cli deploy --image=ghcr.io/fititnt/wiki-telegram-bot:latest --secret=secret-wiki-telegram-bot-001 --name=wiki-telegram-bot
+faas-cli deploy --image=ghcr.io/fititnt/wiki-as-base:latest --name=wiki-as-base
+faas-cli deploy --image=ghcr.io/fititnt/api-rdf:latest --name=api-rdf
