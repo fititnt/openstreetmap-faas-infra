@@ -88,6 +88,13 @@ ufw_rules:
     port: 8080
     proto: tcp
     comment: "HTTP port: internal OpenFaas port (only for short time enable)"
+
+  # TODO: comment this 8081 rule
+  - rule: allow
+    port: 8081
+    proto: tcp
+    comment: "HTTP port: internal OpenFaas port (only for short time enable)"
+
   # # TODO: comment this 8000 rule
   # - rule: allow
   #   port: 8000
