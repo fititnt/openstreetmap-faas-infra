@@ -1,8 +1,10 @@
 # openstreetmap-faas-infra
-**Non-official OpenStreetMap™ Infrastructure as code (Ansible) used to run free hosting of Function as a Service for mappers and linked data peers**. With ❤️, from 🇧🇷.
+**Non-official OpenStreetMap™ Infrastructure as code (Ansible) used to run free hosting of Function as a Service for both mappers and linked data peers**. With ❤️, from 🇧🇷.
+
+[![Ansible](img/vscode-ansible.png)](https://github.com/ansible/logos)
+[![OpenFaas](img/openfaas-whale.png)](https://www.openfaas.com/)
 
 > Tip: if you're here because of the functions (to run chatbot, API requests, etc), [check the function stores, the openstreetmap-serverless-functions](https://github.com/fititnt/openstreetmap-serverless-functions).
-
 
 ## How to run
 
@@ -114,6 +116,8 @@ TODO see https://wiki.osmfoundation.org/wiki/Trademark_Policy
 
 OpenStreetMap™ is a trademark of the OpenStreetMap Foundation, and is used with their permission.
 This project is not endorsed by or affiliated with the OpenStreetMap Foundation. (via [OSMF Trademark_Policy](https://wiki.osmfoundation.org/wiki/Trademark_Policy))
+
+Ansible logos are trademarked (via [ansible/logos](https://github.com/ansible/logos))
 
 ## License
 
