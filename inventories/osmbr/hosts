@@ -19,6 +19,12 @@ osmbr_bravo
 [nginx]
 osmbr_bravo
 
+[munin_full]
+osmbr_bravo
+
+[munin_node]
+# empty
+
 [openfaasd]
 osmbr_bravo
 

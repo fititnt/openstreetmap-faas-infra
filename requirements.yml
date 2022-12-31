@@ -8,3 +8,12 @@
 # https://github.com/geerlingguy/ansible-role-swap
 - src: geerlingguy.swap
   # Tested with: geerlingguy.swap (1.0.2)
+
+# https://github.com/geerlingguy/ansible-role-munin
+# https://galaxy.ansible.com/geerlingguy/munin
+- name: geerlingguy.munin
+  version: 2.0.0
+
+# # https://github.com/geerlingguy/ansible-role-munin-node
+# - name: geerlingguy.munin-node
+#   version: 1.3.0

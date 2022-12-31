@@ -1,0 +1,16 @@
+---
+# FILE:            playbooks/infra-munin-node.yml
+# LICENSE:         Public Domain
+# SEE:             https://github.com/geerlingguy/ansible-role-munin-node
+# DESCRIPTION:
+#
+
+# Note: as 2022-12-31, not used
+
+- name: "infra-munin-node.yml | munin_node"
+  hosts: munin_node
+  remote_user: root
+  gather_facts: true
+  debugger: on_failed
+  roles:
+    - role: geerlingguy.munin-node

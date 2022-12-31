@@ -12,6 +12,13 @@
 ansible-playbook -i inventories/osmbr main.yml
 ```
 
+## The actual servers for the FaaS
+
+> See [inventories/osmbr/](inventories/osmbr/)
+
+- FaaS endpoint: https://osm-faas.etica.ai/
+- Munin: https://osm-faas.etica.ai/munin/
+
 <!--
 
 ## Test URLs

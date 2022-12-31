@@ -1,3 +1,4 @@
 # apps-example
 apps-example/template
 playbooks/files/osmbr_bravo/etc/nginx/mime.types
+playbooks/files/osmbr_bravo/etc/nginx/sites-enabled/munin.conf
