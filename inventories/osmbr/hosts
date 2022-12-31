@@ -21,3 +21,6 @@ osmbr_bravo
 
 [openfaasd]
 osmbr_bravo
+
+[faas]
+osmbr_bravo

@@ -1,5 +1,5 @@
 ---
-# FILE:            inventories/producao/group_vars/swap.yml
+# FILE:            group_vars/swap.yml
 # LICENSE:         Public Domain
 # SEE:             https://github.com/geerlingguy/ansible-role-swap
 

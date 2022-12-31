@@ -1,0 +1,31 @@
+---
+# FILE:            group_vars/functions.yml
+# LICENSE:         Public Domain
+
+faas_base: "https://osm-faas.etica.ai/"
+faas_function_base: "https://osm-faas.etica.ai/function/"
+
+faas_index_template: "{{ playbook_dir }}/templates/faas/index.jsonld.j2"
+faas_index_destiny: "/var/www/html/index.jsonld"
+faas_jsonschema_template: "{{ playbook_dir }}/templates/faas/schema.json.j2"
+faas_jsonschema_destiny: "/var/www/html/schema.json"
+faas_jsonldcontext_template: "{{ playbook_dir }}/templates/faas/context.jsonld.j2"
+faas_jsonldcontext_destiny: "/var/www/html/context.jsonld"
+
+# This list only contains a short list of apps, likely the most common ones used
+faas_function:
+
+  - slug: api-rdf
+    public: true
+
+  - slug: api-proxy
+    public: true
+
+  - slug: wiki-as-base
+    public: true
+
+  - slug: nodeinfo
+    public: true
+
+  - slug: cows
+    public: true

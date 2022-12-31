@@ -1,0 +1,76 @@
+---
+# FILE:            playbooks/infra-faas-index.yml
+# LICENSE:         Public Domain
+#
+# USAGE:
+# To check changes without apply:
+#     ansible-playbook -i inventories/osmbr playbooks/infra-faas-index.yml --check --diff
+#
+# To run this playbook alone, use:
+#     ansible-playbook -i inventories/osmbr playbooks/infra-faas-index.yml --diff
+#     ansible-playbook -i inventories/osmbr playbooks/infra-faas-index.yml --diff --limit=osmbr_bravo
+#
+
+- name: "infra-faas-index.yml"
+  hosts: "faas"
+  become: true
+  become_user: root
+  debugger: on_failed
+  gather_facts: true
+  # vars:
+
+  handlers:
+    # - name: reload ufw
+    #   #service: name=ufw state=reloaded
+    #   service:
+    #     name: ufw
+    #     state: restarted
+
+    # - name: restart ufw
+    #   service:
+    #     name: ufw
+    #     state: restarted
+
+  tasks:
+    - name: "infra-faas-index.yml | {{ faas_index_destiny }}"
+      template:
+        src: "{{ faas_index_template }}"
+        dest: "{{ faas_index_destiny }}"
+        owner: root
+        group: root
+        mode: 0644
+        backup: false
+      # register: result_ufw_defaultfile
+      # with_items: "{{ ufw_bastions }}"
+      # when:
+      #   - "(faas_index_template is defined) and (faas_index_template|length > 0 )"
+
+    - name: "infra-faas-index.yml | {{ faas_jsonschema_destiny }}"
+      template:
+        src: "{{ faas_jsonschema_template }}"
+        dest: "{{ faas_jsonschema_destiny }}"
+        owner: root
+        group: root
+        mode: 0644
+        backup: false
+
+    - name: "infra-faas-index.yml | {{ faas_jsonldcontext_destiny }}"
+      template:
+        src: "{{ faas_jsonldcontext_template }}"
+        dest: "{{ faas_jsonldcontext_destiny }}"
+        owner: root
+        group: root
+        mode: 0644
+        backup: false
+
+    # - name: "infra-faas-index.yml | ufw_bastions | FROM bastion"
+    #   ufw:
+    #     rule: allow
+    #     from_ip: "{{ item.ip }}"
+    #     comment: "Allow all from bastion {{ item.name }}"
+    #   with_items: "{{ ufw_bastions }}"
+    #   when:
+    #     - "ufw_bastions is defined"
+    #     - "(item.ignore_item is not defined) or (not item.ignore_item)"
+    #   notify:
+    #     - restart ufw
