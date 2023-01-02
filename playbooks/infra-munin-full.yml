@@ -57,12 +57,12 @@
   #     when:
   #       - "(munin_setupfcgi_enabled is defined) and (munin_setupfcgi_enabled|bool)"
 
-# #  geerlingguy.munin-node is need if node port is customized. Thats why we're
-# #  calling even on a node with the web interface
-# - name: "infra-munin-full.yml: geerlingguy.munin-node"
-#   hosts: munin_full
-#   # remote_user: root
-#   # gather_facts: true
-#   debugger: on_failed
-#   roles:
-#     - role: geerlingguy.munin-node
+#  geerlingguy.munin-node is need if node port is customized. Thats why we're
+#  calling even on a node with the web interface
+- name: "infra-munin-full.yml: geerlingguy.munin-node"
+  hosts: munin_full
+  # remote_user: root
+  # gather_facts: true
+  debugger: on_failed
+  roles:
+    - role: geerlingguy.munin-node

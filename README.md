@@ -20,6 +20,10 @@ ansible-playbook -i inventories/osmbr main.yml
 - Munin: https://osm-faas.etica.ai/munin/
 
 <!--
+- https://munin.openstreetmap.org/
+-->
+
+<!--
 
 ## Test URLs
 - curl https://osm-faas.etica.ai/function/nodeinfo

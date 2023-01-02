@@ -7,3 +7,7 @@ munin_hosts:
   - name: "localhost"
     address: "127.0.0.1"
     extra: ["use_node_name yes"]
+
+# @TODO 
+#       - https://gallery.munin-monitoring.org/categories/
+#       - https://gallery.munin-monitoring.org/categories/nginx/

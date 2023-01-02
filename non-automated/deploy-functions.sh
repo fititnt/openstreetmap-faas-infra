@@ -39,5 +39,9 @@ OPENFAAS_USER="${OPENFAAS_USER:-'admin'}"
 faas-cli deploy --help
 
 faas-cli deploy --image=ghcr.io/fititnt/wiki-telegram-bot:latest --secret=secret-wiki-telegram-bot-001 --name=wiki-telegram-bot
+
+faas-cli deploy --image=ghcr.io/fititnt/wiki-telegram-chatbot:latest --secret=secret-wiki-telegram-chatbot-002 --env TELEGRAM_BOT_FILE_TOKEN='secret-wiki-telegram-chatbot-002' --name=wiki-telegram-chatbot
+
+faas-cli deploy --image=ghcr.io/fititnt/overpass-proxy:latest --name=overpass-proxy
 faas-cli deploy --image=ghcr.io/fititnt/wiki-as-base:latest --name=wiki-as-base
 faas-cli deploy --image=ghcr.io/fititnt/api-rdf:latest --name=api-rdf

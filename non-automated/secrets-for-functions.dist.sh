@@ -44,3 +44,9 @@ faas-cli secret create secret-wiki-telegram-bot-001
 # <REDACTED>
 # Creating secret: secret-wiki-telegram-bot-001.
 # Created: 200 OK
+
+faas-cli secret create secret-wiki-telegram-chatbot-002
+# Reading from STDIN - hit (Control + D) to stop.
+# <REDACTED>
+# Creating secret: secret-wiki-telegram-chatbot-002.
+# Created: 200 OK
