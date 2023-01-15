@@ -46,6 +46,10 @@ sudo netstat -ntulp && sudo ufw status numbered
 sudo journalctl -u faasd -f
 sudo journalctl -f
 
+sudo journalctl -g overpass*
+sudo journalctl -g 21:33*
+sudo journalctl -g cron-connector*
+
 ```
 
 ## Global overview
